@@ -3,10 +3,12 @@ import { Navigate } from 'react-router-dom'
 import SerieService from '../services/SerieService';
 import PersonajeService from '../services/PersonajeService';
 
-
 export default class UpdatePersonaje extends Component {
-    peronajeService = new PersonajeService();
+    personajeService = new PersonajeService();
     serieService = new SerieService();
+
+    selectSerie = React.createRef();
+    selectPersonaje = React.createRef();
 
     state = {
         series: [],
@@ -15,51 +17,50 @@ export default class UpdatePersonaje extends Component {
         serie: null,
         status: false,
         idSerie: null
-
     }
 
     componentDidMount = () => {
         this.serieService.getSeries().then((response) => {
             this.setState({ series: response.data });
         })
-        this.PersonajeService.getSeries().then((responde) => {
-            this.setState({ personajes: responde.data });
+        this.personajeService.getPersonajes().then((response) => {
+            this.setState({ personajes: response.data });
         })
     }
 
     cambiarSerie = () => {
         this.serieService.findSerie(this.selectSerie.current.value).then((response) => {
-            this.setState({
-                serie: response.data
-            })
+            this.setState({ serie: response.data })
         })
     }
+
     cambiarPersonaje = () => {
-        this.peronajeService.findPersonaje(this.selectPersonaje.current.value).then((responde) => {
-            this.setState({
-                personaje: responde.data
-            })
+        this.personajeService.findPersonaje(this.selectPersonaje.current.value).then((response) => {
+            this.setState({ personaje: response.data })
         })
     }
+
     updatePersonaje = (event) => {
-        preventDefault();
+        event.preventDefault();
         let idSerie = this.selectSerie.current.value;
         let idPersonaje = this.selectPersonaje.current.value;
         if (idSerie == "" || idPersonaje == "") return;
-        this.peronajeService.updatePersonajeSerie(idPersonaje, idSerie).then(() => {
+        this.personajeService.updatePersonajeSerie(idPersonaje, idSerie).then(() => {
             this.setState({
-                status:true,
+                status: true,
                 idSerie: idSerie
             })
         })
-
     }
-  
 
+    render() {
+        if (this.state.status == true) {
+            return (<Navigate to={"/serie/" + this.state.idSerie} />)
+        }
 
+        let select = "mt-1 mb-4 w-full rounded-lg border border-slate-300 px-3 py-2";
+        let label = "block text-sm font-medium text-slate-700";
 
-
-  render() {
         return (
             <main className="mx-auto max-w-lg px-4 py-8">
                 <h1 className="text-4xl text-blue-700 mb-4">Personajes y series</h1>
@@ -92,7 +93,6 @@ export default class UpdatePersonaje extends Component {
                     </button>
                 </form>
 
-                {/* VISTA PREVIA */}
                 {
                     this.state.serie &&
                     <div className="mt-6">
@@ -109,5 +109,5 @@ export default class UpdatePersonaje extends Component {
                 }
             </main>
         )
-      }
+    }
 }
