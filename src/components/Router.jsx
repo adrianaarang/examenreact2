@@ -5,6 +5,7 @@ import MenuComponent from './MenuComponent'
 import HomeComponent from './HomeComponent'
 import SerieComponent from './SerieComponent'
 import InsertPersonaje from './InsertPersonaje'
+import UpdatePersonaje from './UpdatePersonaje'
 
 
 
@@ -23,6 +24,7 @@ render() {
                     <Route path="/" element={<HomeComponent />} />
                     <Route path="/serie/:idSerie" element={<SerieElement />} />
                     <Route path="/create" element={<InsertPersonaje />} />
+                    <Route path="/update" element={<UpdatePersonaje />} />
                 </Routes>
             </BrowserRouter>
         )
